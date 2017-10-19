@@ -7,8 +7,6 @@ namespace FluentDataflow
     /// </summary>
     public struct DataflowJoinOptions
     {
-        private static GroupingDataflowBlockOptions DefaultJoinOptions = new GroupingDataflowBlockOptions();
-
         private GroupingDataflowBlockOptions _joinOptions;
         private DataflowLinkOptions _target1LinkOptions;
         private DataflowLinkOptions _target2LinkOptions;
@@ -21,7 +19,7 @@ namespace FluentDataflow
         {
             get
             {
-                return _joinOptions ?? DefaultJoinOptions;
+                return _joinOptions ?? DataflowDefaultOptions.DefaultGroupingBlockOptions;
             }
             set
             {

@@ -7,8 +7,6 @@ namespace FluentDataflow
     /// </summary>
     public struct DataflowWriteOnceOptions
     {
-        private static GroupingDataflowBlockOptions DefaultWriteOnceOptions = new GroupingDataflowBlockOptions();
-
         private GroupingDataflowBlockOptions _writeOnceOptions;
         private DataflowLinkOptions _linkOptions;
 
@@ -19,7 +17,7 @@ namespace FluentDataflow
         {
             get
             {
-                return _writeOnceOptions ?? DefaultWriteOnceOptions;
+                return _writeOnceOptions ?? DataflowDefaultOptions.DefaultGroupingBlockOptions;
             }
             set
             {

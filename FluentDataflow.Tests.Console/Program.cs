@@ -11,7 +11,7 @@ namespace FluentDataflow.Tests.Console
 
         static void Main(string[] args)
         {
-            TestBatch();
+            TestBatchedJoin();
 
             System.Console.ReadLine();
         }

@@ -10,11 +10,16 @@ namespace FluentDataflow
         /// <summary>
         /// Default block options.
         /// </summary>
-        public static readonly ExecutionDataflowBlockOptions DefaultBlockOptions = new ExecutionDataflowBlockOptions();
+        public static ExecutionDataflowBlockOptions DefaultBlockOptions => new ExecutionDataflowBlockOptions();
 
         /// <summary>
         /// Default link options.
         /// </summary>
-        public static readonly DataflowLinkOptions DefaultLinkOptions = new DataflowLinkOptions { PropagateCompletion = true };
+        public static DataflowLinkOptions DefaultLinkOptions => new DataflowLinkOptions { PropagateCompletion = true };
+
+        /// <summary>
+        /// Default grouping block options.
+        /// </summary>
+        public static GroupingDataflowBlockOptions DefaultGroupingBlockOptions => new GroupingDataflowBlockOptions();
     }
 }

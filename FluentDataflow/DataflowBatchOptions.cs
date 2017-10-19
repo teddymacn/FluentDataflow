@@ -7,8 +7,6 @@ namespace FluentDataflow
     /// </summary>
     public struct DataflowBatchOptions
     {
-        private static GroupingDataflowBlockOptions DefaultBatchOptions = new GroupingDataflowBlockOptions();
-
         private GroupingDataflowBlockOptions _batchOptions;
         private DataflowLinkOptions _linkOptions;
 
@@ -19,7 +17,7 @@ namespace FluentDataflow
         {
             get
             {
-                return _batchOptions ?? DefaultBatchOptions;
+                return _batchOptions ?? DataflowDefaultOptions.DefaultGroupingBlockOptions;
             }
             set
             {

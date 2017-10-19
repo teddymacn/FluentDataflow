@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading.Tasks.Dataflow;
-using FluentDataFlow;
 
 namespace FluentDataflow.Tests.UnitTests
 {

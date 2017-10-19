@@ -12,8 +12,6 @@ Nuget Package
 
 - [FluentDataflow](https://www.nuget.org/packages/FluentDataflow/)
 
-**Caution:** Although the nuget package is targetting .netstandard 2.0, it actually could only work with the desktop .Net Framework 4.6.1 because the TPL Dataflow library only supports the desktop version of .Net Framework.
-
 Examples
 --------
 You can git clone this repo and run [the test app](https://github.com/teddymacn/FluentDataflow/tree/master/FluentDataflow.Tests.Console) for real examples.
