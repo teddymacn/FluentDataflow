@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks.Dataflow;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FluentDataflow
 {
@@ -179,6 +180,95 @@ namespace FluentDataflow
             if (broadcastBlock == null) throw new ArgumentNullException("broadcastBlock");
 
             return new BroadcastDataflowBuilder<T>(broadcastBlock);
+        }
+
+        /// <summary>
+        /// Encapsulates custom dataflow block head and tail as one dataflow block.
+        /// </summary>
+        /// <param name="head"></param>
+        /// <param name="tail"></param>
+        /// <returns></returns>
+        public IDataflowBlock EncapsulateDataflow(IDataflowBlock head, IDataflowBlock tail)
+        {
+            if (head == null) throw new ArgumentNullException("head");
+            if (tail == null) throw new ArgumentNullException("tail");
+
+            return new DataflowWrapper(head, head, tail);
+        }
+
+        /// <summary>
+        /// Encapsulates custom dataflow block multiple heads and a tail as one dataflow block.
+        /// </summary>
+        /// <param name="multipleHeads"></param>
+        /// <param name="tail"></param>
+        /// <returns></returns>
+        public IDataflowBlock EncapsulateDataflow(IEnumerable<IDataflowBlock> multipleHeads, IDataflowBlock tail)
+        {
+            if (multipleHeads == null || !multipleHeads.Any()) throw new ArgumentNullException("multipleHeads");
+            if (tail == null) throw new ArgumentNullException("tail");
+
+            return EncapsulateDataflow(new MultipleSourceDataflowWrapper(multipleHeads.ToArray()), tail);
+        }
+
+        /// <summary>
+        /// Encapsulates custom dataflow block head and tail as one dataflow block.
+        /// </summary>
+        /// <typeparam name="TOutput"></typeparam>
+        /// <param name="head"></param>
+        /// <param name="tail"></param>
+        /// <returns></returns>
+        public ISourceBlock<TOutput> EncapsulateSourceDataflow<TOutput>(IDataflowBlock head, ISourceBlock<TOutput> tail)
+        {
+            if (head == null) throw new ArgumentNullException("head");
+            if (tail == null) throw new ArgumentNullException("tail");
+
+            return new SourceDataflowWrapper<TOutput>(head, head, tail);
+        }
+
+        /// <summary>
+        /// Encapsulates custom dataflow block multiple heads and a tail as one dataflow block.
+        /// </summary>
+        /// <typeparam name="TOutput"></typeparam>
+        /// <param name="multipleHeads"></param>
+        /// <param name="tail"></param>
+        /// <returns></returns>
+        public ISourceBlock<TOutput> EncapsulateSourceDataflow<TOutput>(IEnumerable<IDataflowBlock> multipleHeads, ISourceBlock<TOutput> tail)
+        {
+            if (multipleHeads == null || !multipleHeads.Any()) throw new ArgumentNullException("multipleHeads");
+            if (tail == null) throw new ArgumentNullException("tail");
+
+            return EncapsulateSourceDataflow(new MultipleSourceDataflowWrapper(multipleHeads.ToArray()), tail);
+        }
+
+        /// <summary>
+        /// Encapsulates custom dataflow block head and tail as one dataflow block.
+        /// </summary>
+        /// <typeparam name="TInput"></typeparam>
+        /// <param name="head"></param>
+        /// <param name="tail"></param>
+        /// <returns></returns>
+        public ITargetBlock<TInput> EncapsulateTargetDataflow<TInput>(ITargetBlock<TInput> head, IDataflowBlock tail)
+        {
+            if (head == null) throw new ArgumentNullException("head");
+            if (tail == null) throw new ArgumentNullException("tail");
+
+            return new TargetDataflowWrapper<TInput>(head, tail);
+        }
+
+        /// <summary>
+        /// Encapsulates custom dataflow block head and tail as one dataflow block.
+        /// </summary>
+        /// <typeparam name="TInput"></typeparam>
+        /// <typeparam name="TOutput"></typeparam>
+        /// <param name="head"></param>
+        /// <param name="tail"></param>
+        /// <returns></returns>
+        public IPropagatorBlock<TInput, TOutput> EncapsulatePropagatorDataflow<TInput, TOutput>(ITargetBlock<TInput> head, ISourceBlock<TOutput> tail)
+        {
+            if (head == null) throw new ArgumentNullException("head");
+            if (tail == null) throw new ArgumentNullException("tail");
+
+            return DataflowBlock.Encapsulate(head, tail);
         }
     }
 }

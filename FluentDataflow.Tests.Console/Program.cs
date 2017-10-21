@@ -11,7 +11,7 @@ namespace FluentDataflow.Tests.Console
 
         static void Main(string[] args)
         {
-            TestBatchedJoin();
+            TestIfElseBranchingAndMerging();
 
             System.Console.ReadLine();
         }
@@ -156,7 +156,14 @@ namespace FluentDataflow.Tests.Console
             var inputBlock = new BufferBlock<int>();
 
             var dataflow = _factory.FromPropagator(inputBlock)
-                .LinkToTarget(printer, DataflowDefaultOptions.DefaultBlockOptions, new DataflowLinkOptions { MaxMessages = -1, PropagateCompletion = true }, filter, declinedPrinter)
+                .LinkToTarget(printer
+                    , DataflowDefaultOptions.DefaultBlockOptions
+                    , new DataflowLinkOptions { MaxMessages = -1, PropagateCompletion = true }
+                    , filter
+                    // when linking with filter, you have to specify a declined action/block
+                    // otherwise, because there will be messages declined still in the queue,
+                    // the current block will not be able to COMPLETE (waits on its Completion will never return)
+                    , declinedPrinter)
                 .Create();
 
             for (int i = 0; i < 10; ++i)
@@ -227,6 +234,42 @@ namespace FluentDataflow.Tests.Console
                 var s = i.ToString();
                 source1.Post(s);
                 source2.Post(s);
+            }
+
+            dataflow.Complete();
+
+            Task.WaitAll(dataflow.Completion);
+        }
+
+        private static void TestIfElseBranchingAndMerging()
+        {
+            // the ifFilter only accepts even numbers,
+            // so odd numbers goes to elseBlock
+            var ifFilter = new Predicate<int>(i =>
+            {
+                return i % 2 == 0;
+            });
+            var printer = new Action<int>(s => System.Console.WriteLine("printer: " + s.ToString()));
+            var inputBlock = new BufferBlock<int>();
+            // if meet ifFilter, convert to: i -> i * 10
+            var ifBlock = new TransformBlock<int, int>(i => i * 10);
+            // else, convert to: i -> i * 100
+            var elseBlock = new TransformBlock<int, int>(i => i * 100);
+
+            var branchingDataflow = _factory.FromPropagator(inputBlock)
+                .LinkToPropagator(ifBlock, ifFilter, elseBlock)
+                .Create();
+
+            var mergeingDataflow = _factory.FromMultipleSources(ifBlock, elseBlock)
+                .LinkToTarget(printer)
+                .Create();
+
+            //encapsulate branchingDataflow and mergeingDataflow
+            var dataflow = _factory.EncapsulateTargetDataflow(branchingDataflow, mergeingDataflow);
+
+            for (int i = 0; i < 10; ++i)
+            {
+                dataflow.Post(i);
             }
 
             dataflow.Complete();

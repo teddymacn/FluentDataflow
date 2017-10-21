@@ -99,5 +99,58 @@ namespace FluentDataflow
         /// <param name="broadcastBlock"></param>
         /// <returns></returns>
         IBroadcastDataflowBuilder<T> FromBroadcast<T>(BroadcastBlock<T> broadcastBlock);
+
+        /// <summary>
+        /// Encapsulates custom dataflow block head and tail as one dataflow block.
+        /// </summary>
+        /// <param name="head"></param>
+        /// <param name="tail"></param>
+        /// <returns></returns>
+        IDataflowBlock EncapsulateDataflow(IDataflowBlock head, IDataflowBlock tail);
+
+        /// <summary>
+        /// Encapsulates custom dataflow block multiple heads and a tail as one dataflow block.
+        /// </summary>
+        /// <param name="multipleHeads"></param>
+        /// <param name="tail"></param>
+        /// <returns></returns>
+        IDataflowBlock EncapsulateDataflow(IEnumerable<IDataflowBlock> multipleHeads, IDataflowBlock tail);
+
+        /// <summary>
+        /// Encapsulates custom dataflow block head and tail as one dataflow block.
+        /// </summary>
+        /// <typeparam name="TOutput"></typeparam>
+        /// <param name="head"></param>
+        /// <param name="tail"></param>
+        /// <returns></returns>
+        ISourceBlock<TOutput> EncapsulateSourceDataflow<TOutput>(IDataflowBlock head, ISourceBlock<TOutput> tail);
+
+        /// <summary>
+        /// Encapsulates custom dataflow block multiple heads and a tail as one dataflow block.
+        /// </summary>
+        /// <typeparam name="TOutput"></typeparam>
+        /// <param name="multipleHeads"></param>
+        /// <param name="tail"></param>
+        /// <returns></returns>
+        ISourceBlock<TOutput> EncapsulateSourceDataflow<TOutput>(IEnumerable<IDataflowBlock> multipleHeads, ISourceBlock<TOutput> tail);
+
+        /// <summary>
+        /// Encapsulates custom dataflow block head and tail as one dataflow block.
+        /// </summary>
+        /// <typeparam name="TInput"></typeparam>
+        /// <param name="head"></param>
+        /// <param name="tail"></param>
+        /// <returns></returns>
+        ITargetBlock<TInput> EncapsulateTargetDataflow<TInput>(ITargetBlock<TInput> head, IDataflowBlock tail);
+
+        /// <summary>
+        /// Encapsulates custom dataflow block head and tail as one dataflow block.
+        /// </summary>
+        /// <typeparam name="TInput"></typeparam>
+        /// <typeparam name="TOutput"></typeparam>
+        /// <param name="head"></param>
+        /// <param name="tail"></param>
+        /// <returns></returns>
+        IPropagatorBlock<TInput, TOutput> EncapsulatePropagatorDataflow<TInput, TOutput>(ITargetBlock<TInput> head, ISourceBlock<TOutput> tail);
     }
 }

@@ -8,7 +8,7 @@
     <PackageLicenseUrl>https://mit-license.org/</PackageLicenseUrl>
     <Copyright>Teddy Ma</Copyright>
     <RepositoryUrl>https://github.com/teddymacn/FluentDataflow</RepositoryUrl>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

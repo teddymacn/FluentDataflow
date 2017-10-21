@@ -200,4 +200,40 @@ dataflow.Complete();
 
 Task.WaitAll(dataflow.Completion);
 ```
+- If-else branching and merging example
 
+```
+var factory = new DataflowFactory();
+// the ifFilter only accepts even numbers,
+// so odd numbers goes to elseBlock
+var ifFilter = new Predicate<int>(i =>
+{
+    return i % 2 == 0;
+});
+var printer = new Action<int>(s => System.Console.WriteLine("printer: " + s.ToString()));
+var inputBlock = new BufferBlock<int>();
+// if meet ifFilter, convert to: i -> i * 10
+var ifBlock = new TransformBlock<int, int>(i => i * 10);
+// else, convert to: i -> i * 100
+var elseBlock = new TransformBlock<int, int>(i => i * 100);
+
+var branchingDataflow = factory.FromPropagator(inputBlock)
+    .LinkToPropagator(ifBlock, ifFilter, elseBlock)
+    .Create();
+
+var mergeingDataflow = factory.FromMultipleSources(ifBlock, elseBlock)
+    .LinkToTarget(printer)
+    .Create();
+
+//encapsulate branchingDataflow and mergeingDataflow
+var dataflow = factory.EncapsulateTargetDataflow(branchingDataflow, mergeingDataflow);
+
+for (int i = 0; i < 10; ++i)
+{
+    dataflow.Post(i);
+}
+
+dataflow.Complete();
+
+Task.WaitAll(dataflow.Completion);
+```
