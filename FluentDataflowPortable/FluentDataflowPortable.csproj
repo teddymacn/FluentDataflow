@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{67F9D3A8-F71E-4428-913F-C37AE82CDB24}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FluentDataflow</RootNamespace>
+    <AssemblyName>FluentDataflow</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\FluentDataflow.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\FluentDataflow.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\FluentDataflow\BroadcastDataflowBuilder.cs">
+      <Link>BroadcastDataflowBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\BroadcastDataflowWrapper.cs">
+      <Link>BroadcastDataflowWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\DataflowBatchOptions.cs">
+      <Link>DataflowBatchOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\DataflowBuilder.cs">
+      <Link>DataflowBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\DataflowBuilderExtenions.cs">
+      <Link>DataflowBuilderExtenions.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\DataflowDefaultOptions.cs">
+      <Link>DataflowDefaultOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\DataflowFactory.cs">
+      <Link>DataflowFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\DataflowFactoryExtensions.cs">
+      <Link>DataflowFactoryExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\DataflowJoinOptions.cs">
+      <Link>DataflowJoinOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\DataflowWrapper.cs">
+      <Link>DataflowWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\DataflowWriteOnceOptions.cs">
+      <Link>DataflowWriteOnceOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\IDataflowBuilder.cs">
+      <Link>IDataflowBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\IDataflowFactory.cs">
+      <Link>IDataflowFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\LinkHelper.cs">
+      <Link>LinkHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\MultipleSourceDataflowBuilder.cs">
+      <Link>MultipleSourceDataflowBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\MultipleSourceDataflowWrapper.cs">
+      <Link>MultipleSourceDataflowWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\PropagatorDataflowBuilder.cs">
+      <Link>PropagatorDataflowBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\PropagatorDataflowWrapper.cs">
+      <Link>PropagatorDataflowWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\SourceDataflowBuilder.cs">
+      <Link>SourceDataflowBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\SourceDataflowWrapper.cs">
+      <Link>SourceDataflowWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\TargetDataflowBuilder.cs">
+      <Link>TargetDataflowBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\TargetDataflowWrapper.cs">
+      <Link>TargetDataflowWrapper.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\FluentDataflow\FluentDataflow.csproj">
+      <Link>FluentDataflow.csproj</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.6.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Dataflow.4.8.0\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
