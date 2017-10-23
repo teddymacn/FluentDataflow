@@ -39,7 +39,10 @@ namespace FluentDataflow
             if (ReferenceEquals(_originalTargetBlock, _currentSourceBlock))
                 return DataflowBlock.Encapsulate(_originalTargetBlock, _finalSourceBlock);
 
-            return new PropagatorDataflowWrapper<TInput, TOutput>(_originalTargetBlock, _currentSourceBlock, _finalSourceBlock, _propagateCompletion);
+            if (_finalSourceBlock is IReceivableSourceBlock<TOutput>)
+                return new ReceivablePropagatorDataflowWrapper<TInput, TOutput>(_originalTargetBlock, _currentSourceBlock, _finalSourceBlock, _propagateCompletion);
+            else
+                return new PropagatorDataflowWrapper<TInput, TOutput>(_originalTargetBlock, _currentSourceBlock, _finalSourceBlock, _propagateCompletion);
         }
 
         public ITargetDataflowBuilder<TInput> LinkToTarget(ITargetBlock<TOutput> targetBlock, DataflowLinkOptions linkOptions, Predicate<TOutput> predicate)

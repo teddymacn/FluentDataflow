@@ -91,6 +91,12 @@
     <Compile Include="..\FluentDataflow\PropagatorDataflowWrapper.cs">
       <Link>PropagatorDataflowWrapper.cs</Link>
     </Compile>
+    <Compile Include="..\FluentDataflow\ReceivablePropagatorDataflowWrapper.cs">
+      <Link>ReceivablePropagatorDataflowWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentDataflow\ReceivableSourceDataflowWrapper.cs">
+      <Link>ReceivableSourceDataflowWrapper.cs</Link>
+    </Compile>
     <Compile Include="..\FluentDataflow\SourceDataflowBuilder.cs">
       <Link>SourceDataflowBuilder.cs</Link>
     </Compile>

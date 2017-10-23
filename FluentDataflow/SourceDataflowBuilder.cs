@@ -35,7 +35,11 @@ namespace FluentDataflow
         public ISourceBlock<TOutput> Create()
         {
             if (ReferenceEquals(_originalSourceBlock, _finalSourceBlock)) return _finalSourceBlock;
-            return new SourceDataflowWrapper<TOutput>(_originalSourceBlock, _currentSourceBlock, _finalSourceBlock, _propagateCompletion);
+
+            if (_finalSourceBlock is IReceivableSourceBlock<TOutput>)
+                return new ReceivableSourceDataflowWrapper<TOutput>(_originalSourceBlock, _currentSourceBlock, _finalSourceBlock, _propagateCompletion);
+            else
+                return new SourceDataflowWrapper<TOutput>(_originalSourceBlock, _currentSourceBlock, _finalSourceBlock, _propagateCompletion);
         }
 
         public IDataflowBuilder LinkToTarget(ITargetBlock<TOutput> targetBlock, DataflowLinkOptions linkOptions, Predicate<TOutput> predicate)
