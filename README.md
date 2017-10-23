@@ -19,10 +19,7 @@ You can git clone this repo and run [the test app](https://github.com/teddymacn/
 - Simple aggregation example:
 
 ```
-
-// each step of a dataflow could be either a dataflow block
-// or an action/function delegate
-var splitter = new Func<string, KeyValuePair<string, int>>(input =>
+var splitter = new TransformBlock<string, KeyValuePair<string, int>>(input =>
 {
     string[] splitted = input.Split('=');
     return new KeyValuePair<string, int>(splitted[0], int.Parse(splitted[1]));
@@ -57,12 +54,10 @@ System.Console.WriteLine("sum(a) = {0}", dict["a"]); //prints sum(a) = 6
 ```
 var factory = new DataflowFactory();
 
-var splitter = ...
-var aggregatorDataflow = .FromPropagator(splitter)
-    .LinkToTarget(aggregater)
-    .Create();
+var aggregater = ... // Build an aggregator dataflow
+var splitter = new TransformManyBlock<string, string>(line => line.Split(' '));
 
-var dataflow = factory.FromPropagator<string, string>(line => line.Split(' '))
+var dataflow = factory.FromPropagator<string, string>(splitter)
     .LinkToTarget(aggregator)
     .Create();
 
@@ -80,11 +75,12 @@ System.Console.WriteLine("sum(b) = {0}", result["b"]); //prints sum(b) = 10
 ```
 var printer1 = new ActionBlock<string>(s => System.Console.WriteLine("Printer1: {0}", s));
 var printer2 = new ActionBlock<string>(s => System.Console.WriteLine("Printer2: {0}", s));
+var printer3 = new ActionBlock<string>(s => System.Console.WriteLine("Printer3: {0}", s));
 
 var dataflow = new DataflowFactory().FromBroadcast<string>()
     .LinkTo(printer1)
     .LinkTo(printer2)
-    .LinkTo<string>(s => System.Console.WriteLine("Printer3: {0}", s))
+    .LinkTo(printer3)
     .Create();
 
 dataflow.Post("first message");
@@ -110,9 +106,10 @@ Task.WaitAll(dataflow.Completion);
 var source1 = new BufferBlock<string>();
 var source2 = new BufferBlock<string>();
 var source3 = new BufferBlock<string>();
+var printer = new ActionBlock<string>(s => System.Console.WriteLine(s));
 
 var dataflow = new DataflowFactory().FromMultipleSources(source1, source2, source3)
-    .LinkToTarget(s => System.Console.WriteLine(s))
+    .LinkToTarget(printer)
     .Create();
 
 for (var i = 0; i < 3; ++i)
@@ -132,19 +129,22 @@ Task.WaitAll(dataflow.Completion);
 
 ```
 // the filter only accepts even numbers,
-// so even numbers go to printer
-// and odd numbers go to declined printer
-
+// so odd numbers goes to declined printer
 var filter = new Predicate<int>(i =>
 {
     return i % 2 == 0;
 });
-var printer = new Action<int>(s => System.Console.WriteLine("printer: " + s.ToString()));
-var declinedPrinter = new Action<int>(s => System.Console.WriteLine("declined: " + s.ToString()));
+var printer = new ActionBlock<int>(s => System.Console.WriteLine("printer: " + s.ToString()));
+var declinedPrinter = new ActionBlock<int>(s => System.Console.WriteLine("declined: " + s.ToString()));
 var inputBlock = new BufferBlock<int>();
 
 var dataflow = new DataflowFactory().FromPropagator(inputBlock)
-    .LinkToTarget(printer, DataflowDefaultOptions.DefaultBlockOptions, new DataflowLinkOptions { MaxMessages = -1, PropagateCompletion = true }, filter, declinedPrinter)
+    .LinkToTarget(printer
+        , filter
+        // when linking with filter, you have to specify a declined block
+        // otherwise, because there will be messages declined still in the queue,
+        // the current block will not be able to COMPLETE (waits on its Completion will never return)
+        , declinedPrinter)
     .Create();
 
 for (int i = 0; i < 10; ++i)
@@ -161,7 +161,7 @@ Task.WaitAll(dataflow.Completion);
 ```
 var source1 = new BufferBlock<string>();
 var source2 = new BufferBlock<string>();
-var printer = new Action<Tuple<string, string>>(s => System.Console.WriteLine("printer: {0},{1}", s.Item1, s.Item2));
+var printer = new ActionBlock<Tuple<string, string>>(s => System.Console.WriteLine("printer: {0},{1}", s.Item1, s.Item2));
 
 var dataflow = new DataflowFactory().Join(source1, source2)
     .LinkToTarget(printer)
@@ -183,7 +183,7 @@ Task.WaitAll(dataflow.Completion);
 
 ```
 var source = new BufferBlock<string>();
-var printer = new Action<IEnumerable<string>>(s => System.Console.WriteLine("printer: " +string.Join("|", s)));
+var printer = new ActionBlock<IEnumerable<string>>(s => System.Console.WriteLine("printer: " +string.Join("|", s)));
 
 var dataflow = new DataflowFactory().FromSource(source)
     .Batch(2)
@@ -210,7 +210,7 @@ var ifFilter = new Predicate<int>(i =>
 {
     return i % 2 == 0;
 });
-var printer = new Action<int>(s => System.Console.WriteLine("printer: " + s.ToString()));
+var printer = new ActionBlock<int>(s => System.Console.WriteLine("printer: " + s.ToString()));
 var inputBlock = new BufferBlock<int>();
 // if meet ifFilter, convert to: i -> i * 10
 var ifBlock = new TransformBlock<int, int>(i => i * 10);
