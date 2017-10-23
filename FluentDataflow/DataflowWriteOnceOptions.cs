@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks.Dataflow;
+﻿using System;
+using System.Threading.Tasks.Dataflow;
 
 namespace FluentDataflow
 {
@@ -11,13 +12,28 @@ namespace FluentDataflow
         private DataflowLinkOptions _linkOptions;
 
         /// <summary>
+        /// Initializes a DataflowWriteOnceOptions.
+        /// </summary>
+        /// <param name="writeOnce"></param>
+        /// <param name="link"></param>
+        public DataflowWriteOnceOptions(Action<GroupingDataflowBlockOptions> writeOnce = null
+            , Action<DataflowLinkOptions> link = null)
+        {
+            _writeOnceOptions = DataflowDefaultOptions.DefaultGroupingBlockOptions;
+            _linkOptions = DataflowDefaultOptions.DefaultLinkOptions;
+
+            if (writeOnce != null) writeOnce(_writeOnceOptions);
+            if (link != null) link(_linkOptions);
+        }
+
+        /// <summary>
         /// Block options for creating write once block.
         /// </summary>
         public GroupingDataflowBlockOptions WriteOnceBlockOptions
         {
             get
             {
-                return _writeOnceOptions ?? DataflowDefaultOptions.DefaultGroupingBlockOptions;
+                return _writeOnceOptions ?? (_writeOnceOptions = DataflowDefaultOptions.DefaultGroupingBlockOptions);
             }
             set
             {
@@ -32,7 +48,7 @@ namespace FluentDataflow
         {
             get
             {
-                return _linkOptions ?? DataflowDefaultOptions.DefaultLinkOptions;
+                return _linkOptions ?? (_linkOptions = DataflowDefaultOptions.DefaultLinkOptions);
             }
             set
             {

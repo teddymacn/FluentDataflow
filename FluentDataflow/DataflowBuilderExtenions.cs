@@ -34,7 +34,10 @@ namespace FluentDataflow
         {
             if (builder == null) return null;
             if (targetBlock == null) throw new ArgumentNullException("targetBlock");
+            if (linkOptions == null) throw new ArgumentNullException("linkOptions");
             if (predicate == null) throw new ArgumentNullException("predicate");
+            if (declinedTargetBlock == null) throw new ArgumentNullException("declinedTargetBlock");
+            if (declinedLinkOptions == null) throw new ArgumentNullException("declinedLinkOptions");
 
             var nextBuilder = builder.LinkToTarget(targetBlock, linkOptions, predicate);
 
@@ -93,7 +96,10 @@ namespace FluentDataflow
         {
             if (builder == null) return null;
             if (propagatorBlock == null) throw new ArgumentNullException("propagatorBlock");
+            if (linkOptions == null) throw new ArgumentNullException("linkOptions");
             if (predicate == null) throw new ArgumentNullException("predicate");
+            if (declinedTargetBlock == null) throw new ArgumentNullException("declinedTargetBlock");
+            if (declinedLinkOptions == null) throw new ArgumentNullException("declinedLinkOptions");
 
             var nextBuilder = builder.LinkToPropagator(propagatorBlock, linkOptions, predicate);
 
@@ -151,7 +157,10 @@ namespace FluentDataflow
         {
             if (builder == null) return null;
             if (targetBlock == null) throw new ArgumentNullException("targetBlock");
+            if (linkOptions == null) throw new ArgumentNullException("linkOptions");
             if (predicate == null) throw new ArgumentNullException("predicate");
+            if (declinedTargetBlock == null) throw new ArgumentNullException("declinedTargetBlock");
+            if (declinedLinkOptions == null) throw new ArgumentNullException("declinedLinkOptions");
 
             var nextBuilder = builder.LinkToTarget(targetBlock, linkOptions, predicate);
 
@@ -208,7 +217,10 @@ namespace FluentDataflow
         {
             if (builder == null) return null;
             if (propagatorBlock == null) throw new ArgumentNullException("propagatorBlock");
+            if (linkOptions == null) throw new ArgumentNullException("linkOptions");
             if (predicate == null) throw new ArgumentNullException("predicate");
+            if (declinedTargetBlock == null) throw new ArgumentNullException("declinedTargetBlock");
+            if (declinedLinkOptions == null) throw new ArgumentNullException("declinedLinkOptions");
 
             var nextBuilder = builder.LinkToPropagator(propagatorBlock, linkOptions, predicate);
 
@@ -265,7 +277,10 @@ namespace FluentDataflow
         {
             if (builder == null) return null;
             if (targetBlock == null) throw new ArgumentNullException("targetBlock");
+            if (linkOptions == null) throw new ArgumentNullException("linkOptions");
             if (predicate == null) throw new ArgumentNullException("predicate");
+            if (declinedTargetBlock == null) throw new ArgumentNullException("declinedTargetBlock");
+            if (declinedLinkOptions == null) throw new ArgumentNullException("declinedLinkOptions");
 
             var nextBuilder = builder.LinkToTarget(targetBlock, linkOptions, predicate);
 
@@ -321,7 +336,10 @@ namespace FluentDataflow
         {
             if (builder == null) return null;
             if (targetBlock == null) throw new ArgumentNullException("targetBlock");
+            if (linkOptions == null) throw new ArgumentNullException("linkOptions");
             if (predicate == null) throw new ArgumentNullException("predicate");
+            if (declinedTargetBlock == null) throw new ArgumentNullException("declinedTargetBlock");
+            if (declinedLinkOptions == null) throw new ArgumentNullException("declinedLinkOptions");
 
             var nextBuilder = builder.LinkTo(targetBlock, linkOptions, predicate);
 

@@ -200,6 +200,7 @@ dataflow.Complete();
 
 Task.WaitAll(dataflow.Completion);
 ```
+
 - If-else branching and merging example
 
 ```
@@ -236,4 +237,19 @@ for (int i = 0; i < 10; ++i)
 dataflow.Complete();
 
 Task.WaitAll(dataflow.Completion);
+```
+
+- Fluent dataflow options creation
+
+```
+var joinOptions = new DataflowJoinOptions(
+    join => join.BoundedCapacity(11).EnsureOrdered().MaxNumberOfGroups(1)
+    , target2: _ => _.Append().MaxMessages(1).PropagateCompletion());
+
+var batchOptions = new DataflowBatchOptions(
+    batch => batch.BoundedCapacity(2).Greedy().MaxNumberOfGroups(3)
+    , link => link.MaxMessages(1).PropagateCompletion(false)
+    );
+
+var linkOptions = new DataflowLinkOptions().PropagateCompletion(false).MaxMessages(2);
 ```

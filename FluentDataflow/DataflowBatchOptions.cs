@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks.Dataflow;
+﻿using System;
+using System.Threading.Tasks.Dataflow;
 
 namespace FluentDataflow
 {
@@ -11,13 +12,28 @@ namespace FluentDataflow
         private DataflowLinkOptions _linkOptions;
 
         /// <summary>
+        /// Initializes a DataflowBatchOptions.
+        /// </summary>
+        /// <param name="batch"></param>
+        /// <param name="link"></param>
+        public DataflowBatchOptions(Action<GroupingDataflowBlockOptions> batch = null
+            , Action<DataflowLinkOptions> link = null)
+        {
+            _batchOptions = DataflowDefaultOptions.DefaultGroupingBlockOptions;
+            _linkOptions = DataflowDefaultOptions.DefaultLinkOptions;
+
+            if (batch != null) batch(_batchOptions);
+            if (link != null) link(_linkOptions);
+        }
+
+        /// <summary>
         /// Block options for creating batch block.
         /// </summary>
         public GroupingDataflowBlockOptions BatchBlockOptions
         {
             get
             {
-                return _batchOptions ?? DataflowDefaultOptions.DefaultGroupingBlockOptions;
+                return _batchOptions ?? (_batchOptions = DataflowDefaultOptions.DefaultGroupingBlockOptions);
             }
             set
             {
@@ -32,7 +48,7 @@ namespace FluentDataflow
         {
             get
             {
-                return _linkOptions ?? DataflowDefaultOptions.DefaultLinkOptions;
+                return _linkOptions ?? (_linkOptions = DataflowDefaultOptions.DefaultLinkOptions);
             }
             set
             {

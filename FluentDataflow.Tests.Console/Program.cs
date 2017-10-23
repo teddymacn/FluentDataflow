@@ -12,7 +12,6 @@ namespace FluentDataflow.Tests.Console
         static void Main(string[] args)
         {
             TestIfElseBranchingAndMerging();
-
             System.Console.ReadLine();
         }
 
@@ -276,6 +275,20 @@ namespace FluentDataflow.Tests.Console
             dataflow.Complete();
 
             Task.WaitAll(dataflow.Completion);
+        }
+
+        private static void TestFluentOptions()
+        {
+            var joinOptions = new DataflowJoinOptions(
+                join => join.BoundedCapacity(11).EnsureOrdered().MaxNumberOfGroups(1)
+                , target2: _ => _.Append().MaxMessages(1).PropagateCompletion());
+
+            var batchOptions = new DataflowBatchOptions(
+                batch => batch.BoundedCapacity(2).Greedy().MaxNumberOfGroups(3)
+                , link => link.MaxMessages(1).PropagateCompletion(false)
+                );
+
+            var linkOptions = new DataflowLinkOptions().PropagateCompletion(false).MaxMessages(2);
         }
     }
 }

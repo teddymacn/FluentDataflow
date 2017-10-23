@@ -82,7 +82,7 @@ namespace FluentDataflow
             LinkHelper.Link(sourceBlock2, joinBlock.Target2, joinOptions.Target2LinkOptions);
 
             var multipleSourcesWrapper = new MultipleSourceDataflowWrapper(new IDataflowBlock[] { sourceBlock1, sourceBlock2 });
-            var sourceWrapper = new SourceDataflowWrapper<Tuple<TOutput1, TOutput2>>(multipleSourcesWrapper, joinBlock, joinBlock);
+            var sourceWrapper = new ReceivableSourceDataflowWrapper<Tuple<TOutput1, TOutput2>>(multipleSourcesWrapper, joinBlock, joinBlock);
 
             return FromSource(sourceWrapper);
         }
@@ -110,7 +110,7 @@ namespace FluentDataflow
             LinkHelper.Link(sourceBlock3, joinBlock.Target3, joinOptions.Target3LinkOptions);
 
             var multipleSourcesWrapper = new MultipleSourceDataflowWrapper(new IDataflowBlock[] { sourceBlock1, sourceBlock2, sourceBlock3 });
-            var sourceWrapper = new SourceDataflowWrapper<Tuple<TOutput1, TOutput2, TOutput3>>(multipleSourcesWrapper, joinBlock, joinBlock);
+            var sourceWrapper = new ReceivableSourceDataflowWrapper<Tuple<TOutput1, TOutput2, TOutput3>>(multipleSourcesWrapper, joinBlock, joinBlock);
 
             return FromSource(sourceWrapper);
         }
@@ -135,7 +135,7 @@ namespace FluentDataflow
             LinkHelper.Link(sourceBlock2, batchedJoinBlock.Target2, joinOptions.Target2LinkOptions);
 
             var multipleSourcesWrapper = new MultipleSourceDataflowWrapper(new IDataflowBlock[] { sourceBlock1, sourceBlock2 });
-            var sourceWrapper = new SourceDataflowWrapper<Tuple<IList<TOutput1>, IList<TOutput2>>>(multipleSourcesWrapper, batchedJoinBlock, batchedJoinBlock);
+            var sourceWrapper = new ReceivableSourceDataflowWrapper<Tuple<IList<TOutput1>, IList<TOutput2>>>(multipleSourcesWrapper, batchedJoinBlock, batchedJoinBlock);
 
             return FromSource(sourceWrapper);
         }
@@ -164,7 +164,7 @@ namespace FluentDataflow
             LinkHelper.Link(sourceBlock3, batchedJoinBlock.Target3, joinOptions.Target3LinkOptions);
 
             var multipleSourcesWrapper = new MultipleSourceDataflowWrapper(new IDataflowBlock[] { sourceBlock1, sourceBlock2, sourceBlock3 });
-            var sourceWrapper = new SourceDataflowWrapper<Tuple<IList<TOutput1>, IList<TOutput2>, IList<TOutput3>>>(multipleSourcesWrapper, batchedJoinBlock, batchedJoinBlock);
+            var sourceWrapper = new ReceivableSourceDataflowWrapper<Tuple<IList<TOutput1>, IList<TOutput2>, IList<TOutput3>>>(multipleSourcesWrapper, batchedJoinBlock, batchedJoinBlock);
 
             return FromSource(sourceWrapper);
         }
@@ -222,7 +222,10 @@ namespace FluentDataflow
             if (head == null) throw new ArgumentNullException("head");
             if (tail == null) throw new ArgumentNullException("tail");
 
-            return new SourceDataflowWrapper<TOutput>(head, head, tail);
+            if (tail is IReceivableSourceBlock<TOutput>)
+                return new ReceivableSourceDataflowWrapper<TOutput>(head, head, tail);
+            else
+                return new SourceDataflowWrapper<TOutput>(head, head, tail);
         }
 
         /// <summary>
