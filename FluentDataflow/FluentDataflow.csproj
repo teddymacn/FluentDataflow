@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>1.0.5.0</AssemblyVersion>
+    <AssemblyVersion>1.0.6.0</AssemblyVersion>
     <Description>A fluent style wrapper and extension of TPL Dataflow.</Description>
     <PackageProjectUrl>https://github.com/teddymacn/FluentDataflow</PackageProjectUrl>
     <PackageLicenseUrl>https://mit-license.org/</PackageLicenseUrl>
     <Copyright>Teddy Ma</Copyright>
     <RepositoryUrl>https://github.com/teddymacn/FluentDataflow</RepositoryUrl>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
